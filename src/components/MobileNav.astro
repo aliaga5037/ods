@@ -25,4 +25,5 @@ import { nav } from '../data/site';
   toggle?.addEventListener('click', open);
   close?.addEventListener('click', shut);
   panel?.querySelectorAll('a').forEach((a) => a.addEventListener('click', shut));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel?.hasAttribute('hidden')) shut(); });
 </script>

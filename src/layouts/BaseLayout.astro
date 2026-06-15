@@ -29,8 +29,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body class="min-h-screen flex flex-col">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:bg-brass focus:text-ink focus:px-4 focus:py-2 focus:rounded-md">Skip to content</a>
     <Nav />
-    <main class="flex-1"><slot /></main>
+    <main id="main-content" class="flex-1"><slot /></main>
     <Footer />
   </body>
 </html>

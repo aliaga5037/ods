@@ -1,7 +1,7 @@
 ---
 title: "Service Name"
 order: 99
-icon: "drop"   # drop | gear | flask | layers | beaker | people
+icon: "drop"   # one of: drop | gear | flask | beaker | layers | people
 summary: "One sentence shown on the service card."
 ---
 

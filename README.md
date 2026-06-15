@@ -67,4 +67,10 @@ Connect the repository to **Vercel** or **Netlify**:
 - **Output directory:** `dist/`
 - **Node version:** 20+
 
-Push to `main` triggers an automatic build and deploy. The contact form is handled by Netlify Forms — no additional configuration required.
+Push to `main` triggers an automatic build and deploy.
+
+### Contact form
+
+The contact form uses **Netlify Forms** (the `data-netlify="true"` attribute in `src/pages/contact.astro`). It works automatically **only when deployed to Netlify** — no backend required.
+
+If you deploy to **Vercel** instead, Netlify Forms will not run and the form will silently fail. In that case switch the form to a static-friendly handler such as [Formspree](https://formspree.io): set the form `action` to your Formspree endpoint, `method="POST"`, and remove the `data-netlify` attribute and the hidden `form-name` input.
