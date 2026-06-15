@@ -5,11 +5,15 @@ import { nav } from '../data/site';
   <button id="navToggle" aria-label="Open menu" aria-expanded="false"
     class="text-text-light p-2 text-2xl leading-none">☰</button>
   <div id="navPanel" hidden
+    role="dialog" aria-modal="true" aria-label="Site navigation"
     class="fixed inset-0 z-50 bg-ink/95 backdrop-blur flex-col items-center justify-center gap-8 text-xl hidden">
     <button id="navClose" aria-label="Close menu" class="absolute top-5 right-6 text-3xl">×</button>
-    {nav.map((item) => (
-      <a href={item.href} class="block py-3 text-text-light hover:text-brass">{item.label}</a>
-    ))}
+    <nav aria-label="Mobile navigation" class="flex flex-col items-center gap-8">
+      {nav.map((item) => (
+        <a href={item.href} class="block py-3 text-text-light hover:text-brass">{item.label}</a>
+      ))}
+      <a href="/contact" class="mt-4 bg-brass text-ink font-semibold px-5 py-3 rounded-md">Talk to an Engineer</a>
+    </nav>
   </div>
 </div>
 <script>
