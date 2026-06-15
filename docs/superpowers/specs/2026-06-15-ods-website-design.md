@@ -32,6 +32,8 @@ Brand tagline (from existing brochure): *"Engineered Solutions. Proven in the Fi
 | Tech stack | **Astro + Tailwind CSS + TypeScript** |
 | Color palette | **"Midnight Brass"** |
 | Homepage hero | **Cinematic full-bleed banner** |
+| Responsive strategy | **Mobile-first** — design and build for small screens first, enhance upward |
+| Future maintenance | **AI-agent-editable** — non-developers update content via AI agents guided by in-repo instructions (see §8) |
 
 ## 3. Positioning & key messaging
 
@@ -97,18 +99,23 @@ supplied by ODS; clean placeholders used where assets are missing.
 ## 7. Technical architecture
 
 ```
-src/
-├── content/                # markdown — the editable content layer
-│   ├── services/           # one .md per service (icon, summary, body)
-│   ├── projects/           # one .md per case study (operator, field, fluid type, outcome)
-│   └── insights/           # blog / technical articles
-├── content.config.ts       # typed (Zod) collection schemas — enforce consistent data
-├── components/             # Hero, ServiceCard, ProjectCard, StatBar, OperatorLogos,
-│                           #   Nav, Footer, CTA, InsightCard
-├── layouts/                # BaseLayout (SEO/fonts), PageLayout, ArticleLayout
-├── pages/                  # index, about, services/[...slug], projects/[...slug],
-│                           #   insights/[...slug], contact
-└── styles/                 # Tailwind theme + Midnight Brass tokens
+.
+├── AGENTS.md               # entry point for any AI agent editing the project (see §8)
+├── docs/
+│   ├── CONTENT-GUIDE.md    # plain-language: how to add/edit a project, service, article
+│   └── superpowers/specs/  # design specs
+├── src/
+│   ├── content/            # markdown — the editable content layer
+│   │   ├── services/       # one .md per service (icon, summary, body)
+│   │   ├── projects/       # one .md per case study (operator, field, fluid type, outcome)
+│   │   └── insights/       # blog / technical articles
+│   ├── content.config.ts   # typed (Zod) collection schemas — enforce consistent data
+│   ├── components/         # Hero, ServiceCard, ProjectCard, StatBar, OperatorLogos,
+│   │                       #   Nav, Footer, CTA, InsightCard
+│   ├── layouts/            # BaseLayout (SEO/fonts), PageLayout, ArticleLayout
+│   ├── pages/              # index, about, services/[...slug], projects/[...slug],
+│   │                       #   insights/[...slug], contact
+│   └── styles/             # Tailwind theme + Midnight Brass tokens
 ```
 
 - **Astro content collections** with Zod schemas: adding a project/service/article = drop
@@ -126,8 +133,40 @@ src/
   outcome, featured(bool), body(md), image?`
 - **insight:** `title, slug, date, author, excerpt, tags[], body(md), cover?`
 
-## 8. Design system — "Midnight Brass"
+## 8. AI-agent-friendly content authoring
 
+A core requirement: **non-technical ODS staff must be able to update the site over time by
+instructing an AI coding agent**, without understanding the code. The agent reads in-repo
+instructions, understands the project's rules and structure, and makes correct changes.
+
+This shapes the build — the markdown + typed-schema architecture already makes content
+self-describing; we add an explicit instruction layer on top:
+
+- **`AGENTS.md` (repo root)** — the single entry point an AI agent reads first. Covers:
+  what the project is, the tech stack, where each kind of content lives, the golden rules
+  (e.g. "never edit files in `src/components` or `src/layouts` for content changes — only
+  `src/content/`"), how to run/preview/deploy, and a task playbook ("To add a project: …",
+  "To publish an article: …", "To change the homepage stats: …").
+- **`docs/CONTENT-GUIDE.md`** — the same playbook in plain language for a human reading over
+  the agent's shoulder, with copy-paste frontmatter templates for each content type.
+- **Self-documenting schemas** — `content.config.ts` Zod schemas include descriptions and
+  enumerated allowed values (e.g. `fluidType: WBM | OBM | brine`). Invalid content fails the
+  build with a clear message, so an agent gets immediate, actionable feedback.
+- **Guardrails** — design tokens, copy, and layout structure are centralized so routine
+  content edits never require touching presentation logic. The riskier files are clearly
+  flagged as "structure — change with care."
+- **Template content files** — each collection ships a commented `_template.md` showing every
+  field, so "add one like the others" is unambiguous for an agent.
+
+Success test: a non-developer can tell an AI agent *"add a new project: Bulla-127, operator
+SOCAR, OBM, 2025, 2 wells, drilled and delivered"* and the agent produces a correct,
+build-passing markdown file with no further guidance.
+
+## 9. Design system — "Midnight Brass"
+
+- **Mobile-first:** every component is designed and implemented for small screens first, then
+  progressively enhanced for tablet/desktop. Touch-friendly targets, no hover-only
+  interactions, performance-conscious imagery on mobile.
 - **Color tokens:** `ink #000000` · `navy #0D1C2E` · `navy-mid #16467A` ·
   `brass #B8863B` · `text-light #C5CDD8`.
 - **Typography:** geometric/grotesk display face for headlines (e.g. Space Grotesk / Sora),
@@ -138,7 +177,7 @@ src/
   Premium = calm and precise, not flashy.
 - **Responsive:** mobile-first, fully responsive.
 
-## 9. Testing & deployment
+## 10. Testing & deployment
 
 - Build-time content validation (invalid frontmatter / broken internal links fail the build).
 - Astro `astro check` type-checking in CI.
@@ -147,14 +186,14 @@ src/
 - Deploy via Git → Vercel/Netlify with preview deploys per change; point a production
   domain (oilmends.com or new) at launch.
 
-## 10. Out of scope (YAGNI)
+## 11. Out of scope (YAGNI)
 
 - Multilingual content (English only for now; architecture leaves room to add later).
 - Headless CMS / admin panel (markdown-authored).
 - Client portal, dashboards, e-commerce, or any authenticated app surface.
 - Live data integrations.
 
-## 11. Open items to confirm with ODS
+## 12. Open items to confirm with ODS
 
 - Final/approved proof statistics (well counts, project counts).
 - Which operator logos may be displayed publicly (esp. BP/SOCAR brand usage).
