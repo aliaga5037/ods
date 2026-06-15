@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import StatBar from '../components/StatBar.astro';
+import CTA from '../components/CTA.astro';
+import { certifications } from '../data/site';
+
+const approach = [
+  ['Real-time engineering', 'Decisions made at the wellsite from live data, not from a desk.'],
+  ['Practical field experience', 'API-certified engineers with onshore and offshore track record.'],
+  ['Risk-based planning', 'Operational plans built around well integrity and NPT reduction.'],
+  ['Performance-driven execution', 'Measured against delivery, cost and fluid-life outcomes.'],
+];
+---
+<BaseLayout title="About" description="ODS is an engineering-driven drilling & completion fluids consultancy.">
+  <section class="max-w-7xl mx-auto px-5 py-20">
+    <SectionHeading eyebrow="About ODS" title="An engineering-driven fluids consultancy"
+      sub="ODS (Oilmen Drilling Services) provides drilling and completion fluids engineering and specialist manpower for onshore and offshore projects — built on a highly experienced team with a proven operational background across international and regional projects." />
+  </section>
+  <StatBar />
+  <section class="max-w-7xl mx-auto px-5 py-20 grid gap-12 md:grid-cols-2">
+    <div>
+      <h2 class="text-2xl font-bold mb-6">Our approach</h2>
+      <ul class="space-y-5">
+        {approach.map(([h, p]) => (
+          <li><div class="text-brass font-semibold">{h}</div><p class="text-text-muted text-sm mt-1">{p}</p></li>
+        ))}
+      </ul>
+    </div>
+    <div>
+      <h2 class="text-2xl font-bold mb-6">Mission & certifications</h2>
+      <p class="text-text-light">Deliver high-quality, safely executed engineering services with zero harm to personnel and no adverse impact on the environment — reducing operational risk and cost for our clients.</p>
+      <div class="flex flex-wrap gap-2 mt-6">
+        {certifications.map((c) => <span class="text-xs border border-brass/30 text-brass px-3 py-1.5 rounded-full">{c}</span>)}
+      </div>
+    </div>
+  </section>
+  <CTA />
+</BaseLayout>
