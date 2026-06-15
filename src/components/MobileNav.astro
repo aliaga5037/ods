@@ -1,0 +1,24 @@
+---
+import { nav } from '../data/site';
+---
+<div class="md:hidden">
+  <button id="navToggle" aria-label="Open menu" aria-expanded="false"
+    class="text-text-light p-2 text-2xl leading-none">☰</button>
+  <div id="navPanel" hidden
+    class="fixed inset-0 z-50 bg-ink/95 backdrop-blur flex-col items-center justify-center gap-8 text-xl hidden">
+    <button id="navClose" aria-label="Close menu" class="absolute top-5 right-6 text-3xl">×</button>
+    {nav.map((item) => (
+      <a href={item.href} class="block py-3 text-text-light hover:text-brass">{item.label}</a>
+    ))}
+  </div>
+</div>
+<script>
+  const toggle = document.getElementById('navToggle');
+  const panel = document.getElementById('navPanel');
+  const close = document.getElementById('navClose');
+  const open = () => { panel?.removeAttribute('hidden'); panel?.classList.remove('hidden'); panel?.classList.add('flex'); toggle?.setAttribute('aria-expanded','true'); };
+  const shut = () => { panel?.setAttribute('hidden',''); panel?.classList.add('hidden'); panel?.classList.remove('flex'); toggle?.setAttribute('aria-expanded','false'); };
+  toggle?.addEventListener('click', open);
+  close?.addEventListener('click', shut);
+  panel?.querySelectorAll('a').forEach((a) => a.addEventListener('click', shut));
+</script>

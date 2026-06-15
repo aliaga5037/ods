@@ -1,0 +1,16 @@
+---
+import { nav, site } from '../data/site';
+import MobileNav from './MobileNav.astro';
+---
+<header class="sticky top-0 z-40 bg-ink/80 backdrop-blur border-b border-brass/20">
+  <nav class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+    <a href="/" class="font-display font-bold tracking-wide text-white text-lg">◆ {site.name}</a>
+    <div class="hidden md:flex items-center gap-8 text-sm">
+      {nav.map((item) => (
+        <a href={item.href} class="text-text-light hover:text-brass transition-colors">{item.label}</a>
+      ))}
+      <a href="/contact" class="bg-brass text-ink font-semibold px-4 py-2 rounded-md hover:bg-brass-soft transition-colors">Talk to an Engineer</a>
+    </div>
+    <MobileNav />
+  </nav>
+</header>
