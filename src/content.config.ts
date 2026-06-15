@@ -5,7 +5,7 @@ import { glob } from 'astro/loaders';
 export const serviceSchema = z.object({
   title: z.string(),
   order: z.number().describe('display order, ascending'),
-  icon: z.string().describe('icon key, e.g. "drop", "gear", "flask"'),
+  icon: z.enum(['drop', 'gear', 'flask', 'beaker', 'layers', 'people']).describe('icon key — one of: drop, gear, flask, beaker, layers, people'),
   summary: z.string().describe('one-line summary shown on cards'),
 });
 

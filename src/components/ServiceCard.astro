@@ -4,7 +4,7 @@ const { title, summary, icon, href } = Astro.props;
 const icons: Record<string,string> = { drop:'🛢', gear:'⚙', flask:'🔬', beaker:'⚗', layers:'♺', people:'👷' };
 ---
 <a href={href} class="block bg-navy/60 border border-brass/15 rounded-xl p-6 hover:border-brass/50 hover:-translate-y-1 transition-all">
-  <div class="text-3xl mb-4">{icons[icon] ?? '◆'}</div>
+  <div class="text-3xl mb-4" aria-hidden="true">{icons[icon] ?? '◆'}</div>
   <h3 class="text-lg font-semibold text-white">{title}</h3>
   <p class="text-text-muted text-sm mt-2">{summary}</p>
 </a>
