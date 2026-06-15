@@ -1,0 +1,14 @@
+---
+import BaseLayout from './BaseLayout.astro';
+interface Props { title: string; date: Date; author: string; excerpt: string; }
+const { title, date, author, excerpt } = Astro.props;
+const dateStr = date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+<BaseLayout title={title} description={excerpt}>
+  <article class="max-w-3xl mx-auto px-5 py-20">
+    <div class="text-xs tracking-[0.3em] uppercase text-brass font-semibold mb-3">Insight · {dateStr}</div>
+    <h1 class="text-4xl font-bold leading-tight">{title}</h1>
+    <p class="text-text-muted mt-3">By {author}</p>
+    <div class="mt-10 text-text-light leading-relaxed space-y-5"><slot /></div>
+  </article>
+</BaseLayout>

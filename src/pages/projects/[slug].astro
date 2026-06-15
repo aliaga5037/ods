@@ -1,0 +1,22 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+---
+<BaseLayout title={d.title} description={d.outcome}>
+  <article class="max-w-3xl mx-auto px-5 py-20">
+    <div class="text-xs tracking-[0.3em] uppercase text-brass font-semibold mb-3">{d.operator} · {d.field}</div>
+    <h1 class="text-4xl font-bold">{d.title}</h1>
+    <div class="flex flex-wrap gap-4 text-sm text-text-muted mt-4">
+      <span>{d.fluidType}</span><span>{d.year}</span><span>{d.location}</span>
+    </div>
+    <p class="text-text-light text-lg mt-6">{d.outcome}</p>
+    <div class="mt-8 text-text-light leading-relaxed space-y-5"><Content /></div>
+  </article>
+</BaseLayout>

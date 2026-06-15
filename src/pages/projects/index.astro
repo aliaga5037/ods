@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import ProjectFilter from '../../components/ProjectFilter.astro';
+const projects = (await getCollection('projects')).sort((a, b) => b.data.year - a.data.year || a.data.title.localeCompare(b.data.title));
+const operators = projects.map((p) => ({ operator: p.data.operator }));
+---
+<BaseLayout title="Projects" description="ODS drilling-fluids project track record across the Caspian and beyond.">
+  <section class="max-w-7xl mx-auto px-5 py-20">
+    <SectionHeading eyebrow="Track record" title="Projects"
+      sub="Supporting drilling operations across the Caspian region, Middle East and international markets." />
+    <div class="mt-12"><ProjectFilter operators={operators} /></div>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {projects.map((p) => <ProjectCard title={p.data.title} operator={p.data.operator} fluidType={p.data.fluidType} year={p.data.year} location={p.data.location} outcome={p.data.outcome} href={`/projects/${p.id}`} />)}
+    </div>
+  </section>
+</BaseLayout>

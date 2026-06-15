@@ -1,0 +1,26 @@
+---
+import { uniqueOperators } from '../data/filters';
+interface Props { operators: { operator: string }[]; }
+const list = uniqueOperators(Astro.props.operators);
+---
+<div class="flex flex-wrap gap-2 mb-8" id="projectFilter">
+  {list.map((op) => (
+    <button data-filter={op}
+      class="text-sm px-4 py-2 rounded-full border border-brass/30 text-text-light hover:border-brass data-[active=true]:bg-brass data-[active=true]:text-ink"
+      data-active={op === 'All' ? 'true' : 'false'}>{op}</button>
+  ))}
+</div>
+<script>
+  const bar = document.getElementById('projectFilter');
+  const cards = Array.from(document.querySelectorAll('[data-operator]'));
+  bar?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('button');
+    if (!btn) return;
+    const filter = btn.dataset.filter;
+    bar.querySelectorAll('button').forEach((b) => b.setAttribute('data-active', String(b === btn)));
+    cards.forEach((c) => {
+      const show = filter === 'All' || (c as HTMLElement).dataset.operator === filter;
+      (c as HTMLElement).style.display = show ? '' : 'none';
+    });
+  });
+</script>

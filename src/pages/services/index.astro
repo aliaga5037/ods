@@ -1,0 +1,16 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout title="Services" description="Drilling and completion fluids engineering services from ODS.">
+  <section class="max-w-7xl mx-auto px-5 py-20">
+    <SectionHeading eyebrow="Services" title="Drilling & completion fluids engineering"
+      sub="Independent consultancy, field engineering and laboratory capability." />
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-12">
+      {services.map((s) => <ServiceCard title={s.data.title} summary={s.data.summary} icon={s.data.icon} href={`/services/${s.id}`} />)}
+    </div>
+  </section>
+</BaseLayout>
