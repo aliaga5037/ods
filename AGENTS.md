@@ -77,12 +77,15 @@ Body: 2–4 paragraphs of markdown describing the service.
 
 ```yaml
 ---
-title: "Field / Well Name"
-operator: "SOCAR"             # client/operator name
-field: "Field name"
-fluidType: "OBM"              # WBM | OBM | brine
+title: "Garadagh #609 — Stuck-Pipe Recovery"   # well or project name (shown as the card/page title)
+operator: "SOCAR"             # client/operator name. Free text — does NOT have to match the
+                              #   `operators` list in src/data/site.ts. (That separate list only
+                              #   controls the logo strip; updating it is a different task.)
+field: "Garadagh"             # the OILFIELD name (e.g. Garadagh, Gunashli, Bibiheybat).
+                              #   This is the geographic field, not the well — it can differ from `title`.
+fluidType: "OBM"              # MUST be exactly one of: WBM | OBM | brine
 year: 2025                    # integer
-location: "Offshore Azerbaijan"
+location: "Offshore Azerbaijan"  # free text; use the pattern "Offshore Azerbaijan" or "Onshore Azerbaijan"
 outcome: "One-line headline result."
 featured: false               # true = show on homepage
 # image: "/images/projects/example.jpg"   # optional
@@ -90,6 +93,10 @@ featured: false               # true = show on homepage
 ```
 
 Body: optional markdown case-study narrative.
+
+> Note on `title` vs `field`: `title` is what readers see (usually the well or campaign name);
+> `field` is the oilfield it sits in. They are often different (e.g. title "Gunashli-10 — Slim-Hole OBM",
+> field "Gunashli"). When you only know one, it's fine to reuse it for both.
 
 ### Insight / Article (`src/content/insights/*.md`)
 
