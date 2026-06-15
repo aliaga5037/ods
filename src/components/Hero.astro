@@ -1,10 +1,27 @@
 ---
 import { site } from '../data/site';
+
+// Background hero video (YouTube). To swap it, change `videoId` to the new
+// YouTube video ID. Set to '' to fall back to the static /images/hero.jpg poster.
+const videoId = 'Su3Rf5pFQyM';
+const videoSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1&disablekb=1&iv_load_policy=3`;
 ---
-<section class="relative min-h-[88vh] flex items-center overflow-hidden">
-  <div class="absolute inset-0 -z-10 bg-cover bg-center"
-       style="background-image:url('/images/hero.jpg');"></div>
-  <div class="absolute inset-0 -z-10 bg-gradient-to-br from-ink/90 via-ink/80 to-navy/70"></div>
+<section class="relative min-h-[88vh] flex items-center overflow-hidden bg-ink">
+  {/* Poster fallback (shown until the video loads, and if video is disabled) */}
+  <div class="absolute inset-0 -z-20 bg-cover bg-center" style="background-image:url('/images/hero.jpg');"></div>
+  {videoId && (
+    <div class="absolute inset-0 -z-10 overflow-hidden pointer-events-none" aria-hidden="true">
+      <iframe
+        class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[177.78vh] min-w-full h-[56.25vw] min-h-full border-0"
+        src={videoSrc}
+        title="Rig site drilling background"
+        loading="lazy"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        referrerpolicy="strict-origin-when-cross-origin"
+        tabindex="-1"></iframe>
+    </div>
+  )}
+  <div class="absolute inset-0 -z-[5] bg-gradient-to-br from-ink/90 via-ink/80 to-navy/70"></div>
   <div class="max-w-7xl mx-auto px-5 w-full">
     <div class="max-w-2xl">
       <div class="text-xs tracking-[0.3em] uppercase text-brass font-semibold mb-5">Independent Drilling Fluids Consultancy</div>
