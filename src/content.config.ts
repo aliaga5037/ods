@@ -30,8 +30,11 @@ export const insightSchema = z.object({
   cover: z.string().optional(),
 });
 
-const services = defineCollection({ loader: glob({ pattern: '**/*.md', base: './src/content/services' }), schema: serviceSchema });
-const projects = defineCollection({ loader: glob({ pattern: '**/*.md', base: './src/content/projects' }), schema: projectSchema });
-const insights = defineCollection({ loader: glob({ pattern: '**/*.md', base: './src/content/insights' }), schema: insightSchema });
+// Pattern excludes files beginning with `_` (e.g. _template.md) so templates
+// never become collection entries / generated pages. The glob loader does NOT
+// auto-ignore underscore files, so this must be explicit.
+const services = defineCollection({ loader: glob({ pattern: '**/[^_]*.md', base: './src/content/services' }), schema: serviceSchema });
+const projects = defineCollection({ loader: glob({ pattern: '**/[^_]*.md', base: './src/content/projects' }), schema: projectSchema });
+const insights = defineCollection({ loader: glob({ pattern: '**/[^_]*.md', base: './src/content/insights' }), schema: insightSchema });
 
 export const collections = { services, projects, insights };
