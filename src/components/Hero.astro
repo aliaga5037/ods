@@ -1,0 +1,19 @@
+---
+import { site } from '../data/site';
+---
+<section class="relative min-h-[88vh] flex items-center overflow-hidden">
+  <div class="absolute inset-0 -z-10 bg-cover bg-center"
+       style="background-image:url('/images/hero.jpg');"></div>
+  <div class="absolute inset-0 -z-10 bg-gradient-to-br from-ink/90 via-ink/80 to-navy/70"></div>
+  <div class="max-w-7xl mx-auto px-5 w-full">
+    <div class="max-w-2xl">
+      <div class="text-xs tracking-[0.3em] uppercase text-brass font-semibold mb-5">Independent Drilling Fluids Consultancy</div>
+      <h1 class="text-4xl md:text-6xl font-bold leading-[1.05]">Wellsite Engineering,<br />Proven in the Field.</h1>
+      <p class="text-text-light mt-6 text-lg max-w-xl">{site.subhead}</p>
+      <div class="flex flex-wrap gap-4 mt-9">
+        <a href="/services" class="bg-brass text-ink font-semibold px-6 py-3 rounded-md hover:bg-brass-soft transition-colors">Our Services</a>
+        <a href="/contact" class="border border-brass text-brass font-semibold px-6 py-3 rounded-md hover:bg-brass/10 transition-colors">Talk to an Engineer</a>
+      </div>
+    </div>
+  </div>
+</section>

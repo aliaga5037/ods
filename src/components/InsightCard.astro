@@ -1,0 +1,10 @@
+---
+interface Props { title: string; excerpt: string; date: Date; href: string; tags: string[]; }
+const { title, excerpt, date, href, tags } = Astro.props;
+const dateStr = date.toLocaleDateString('en-GB', { year:'numeric', month:'short' });
+---
+<a href={href} class="block bg-navy/60 border border-brass/15 rounded-xl p-6 hover:border-brass/50 transition-colors">
+  <div class="text-xs text-brass uppercase tracking-widest">{tags[0] ?? 'Insight'} · {dateStr}</div>
+  <h3 class="text-lg font-semibold text-white mt-3">{title}</h3>
+  <p class="text-text-muted text-sm mt-2">{excerpt}</p>
+</a>

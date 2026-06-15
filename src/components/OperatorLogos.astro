@@ -1,0 +1,9 @@
+---
+import { operators } from '../data/site';
+---
+<section class="max-w-7xl mx-auto px-5 py-16">
+  <p class="text-center text-xs uppercase tracking-[0.3em] text-text-muted mb-8">Trusted on operations for</p>
+  <div class="flex flex-wrap justify-center gap-x-12 gap-y-6 opacity-80">
+    {operators.map((o) => <span class="font-display text-xl text-text-light">{o}</span>)}
+  </div>
+</section>
