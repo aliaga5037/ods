@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { contact } from '../data/site';
+const wa = `https://wa.me/${contact.whatsapp}`;
+---
+<BaseLayout title="Contact" description="Talk to an ODS drilling-fluids engineer.">
+  <section class="max-w-5xl mx-auto px-5 py-20 grid gap-12 md:grid-cols-2">
+    <div>
+      <SectionHeading eyebrow="Contact" title="Talk to an engineer" />
+      <ul class="space-y-4 mt-8 text-text-light">
+        <li><span class="text-brass">Office</span><br />{contact.office}</li>
+        <li><span class="text-brass">Phone</span><br /><a href={`tel:${contact.phone.replace(/\s/g,'')}`} class="hover:text-brass">{contact.phone}</a></li>
+        <li><span class="text-brass">Email</span><br /><a href={`mailto:${contact.email}`} class="hover:text-brass">{contact.email}</a></li>
+        <li><span class="text-brass">WhatsApp</span><br /><a href={wa} class="hover:text-brass">{contact.phone}</a></li>
+      </ul>
+    </div>
+    <form name="contact" method="POST" data-netlify="true" class="space-y-4">
+      <input type="hidden" name="form-name" value="contact" />
+      <label class="block">
+        <span class="sr-only">Name</span>
+        <input name="name" required placeholder="Name" class="w-full bg-navy border border-brass/25 rounded-md px-4 py-3 text-white placeholder:text-text-muted" />
+      </label>
+      <label class="block">
+        <span class="sr-only">Email</span>
+        <input name="email" type="email" required placeholder="Email" class="w-full bg-navy border border-brass/25 rounded-md px-4 py-3 text-white placeholder:text-text-muted" />
+      </label>
+      <label class="block">
+        <span class="sr-only">Company</span>
+        <input name="company" placeholder="Company" class="w-full bg-navy border border-brass/25 rounded-md px-4 py-3 text-white placeholder:text-text-muted" />
+      </label>
+      <label class="block">
+        <span class="sr-only">Message</span>
+        <textarea name="message" required rows="5" placeholder="How can we help?" class="w-full bg-navy border border-brass/25 rounded-md px-4 py-3 text-white placeholder:text-text-muted"></textarea>
+      </label>
+      <button type="submit" class="bg-brass text-ink font-semibold px-7 py-3 rounded-md hover:bg-brass-soft transition-colors">Send</button>
+    </form>
+  </section>
+</BaseLayout>

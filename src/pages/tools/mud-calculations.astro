@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import ToolTabs from '../../components/tools/ToolTabs.astro';
+import ResultPanel from '../../components/tools/ResultPanel.astro';
+const tabs = [
+  { id: 'barite-required', label: 'Barite Required' },
+  { id: 'add-known-barite', label: 'Add Known Barite' },
+  { id: 'cut-weight', label: 'Cut Weight' },
+  { id: 'mix-fluids', label: 'Mix Fluids' },
+  { id: 'owr-adjust', label: 'OWR Adjust' },
+  { id: 'slug', label: 'Slug' },
+];
+const field = 'mt-1 w-full rounded-md border border-brass/20 bg-ink px-3 py-2 text-white';
+const lbl = 'block text-sm'; const cap = 'text-xs uppercase tracking-wide text-text-muted';
+---
+<BaseLayout title="Mud Calculations" description="Barite weight-up, dilution, fluid mixing, OWR adjustment and slug design calculators.">
+  <section class="max-w-3xl mx-auto px-5 py-20">
+    <SectionHeading eyebrow="Tools" title="Mud Calculations" sub="Choose a calculation, enter the parameters, and calculate." />
+    <div class="mt-10"><ToolTabs tabs={tabs} /></div>
+
+    <!-- Barite Required -->
+    <div data-panel="barite-required" class="js-panel mt-8">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class={lbl}><span class={cap}>Initial Weight (sg)</span><input id="br-initial" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Desired Weight (sg)</span><input id="br-desired" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Volume (bbl)</span><input id="br-volume" type="number" step="any" class={field} /></label>
+        <label class="flex items-center gap-2 text-sm mt-6"><input id="br-constant" type="checkbox" /> Constant volume</label>
+      </div>
+      <button data-calc="barite-required" class="js-run mt-4 rounded-md bg-brass px-5 py-2 font-semibold text-ink hover:bg-brass-soft">Calculate</button>
+      <ResultPanel id="br-result" />
+    </div>
+
+    <!-- Add Known Barite -->
+    <div data-panel="add-known-barite" class="js-panel mt-8 hidden">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class={lbl}><span class={cap}>Initial Weight (sg)</span><input id="akb-initial" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Volume (bbl)</span><input id="akb-volume" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Barite Added (tons)</span><input id="akb-barite" type="number" step="any" class={field} /></label>
+      </div>
+      <button data-calc="add-known-barite" class="js-run mt-4 rounded-md bg-brass px-5 py-2 font-semibold text-ink hover:bg-brass-soft">Calculate</button>
+      <ResultPanel id="akb-result" />
+    </div>
+
+    <!-- Cut Weight -->
+    <div data-panel="cut-weight" class="js-panel mt-8 hidden">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class={lbl}><span class={cap}>Initial Weight (sg)</span><input id="cw-initial" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Volume (bbl)</span><input id="cw-volume" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Desired Weight (sg)</span><input id="cw-desired" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Dilution Density (sg)</span><input id="cw-dilution" type="number" step="any" class={field} /></label>
+        <label class="flex items-center gap-2 text-sm mt-6"><input id="cw-constant" type="checkbox" /> Constant volume</label>
+      </div>
+      <button data-calc="cut-weight" class="js-run mt-4 rounded-md bg-brass px-5 py-2 font-semibold text-ink hover:bg-brass-soft">Calculate</button>
+      <ResultPanel id="cw-result" />
+    </div>
+
+    <!-- Mix Fluids -->
+    <div data-panel="mix-fluids" class="js-panel mt-8 hidden">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class={lbl}><span class={cap}>Density 1 (sg)</span><input id="mf-d1" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Volume 1 (bbl)</span><input id="mf-v1" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Density 2 (sg)</span><input id="mf-d2" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Volume 2 (bbl)</span><input id="mf-v2" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Density 3 (sg, optional)</span><input id="mf-d3" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Volume 3 (bbl, optional)</span><input id="mf-v3" type="number" step="any" class={field} /></label>
+      </div>
+      <button data-calc="mix-fluids" class="js-run mt-4 rounded-md bg-brass px-5 py-2 font-semibold text-ink hover:bg-brass-soft">Calculate</button>
+      <ResultPanel id="mf-result" />
+    </div>
+
+    <!-- OWR Adjust -->
+    <div data-panel="owr-adjust" class="js-panel mt-8 hidden">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class={lbl}><span class={cap}>Current OWR</span><input id="owr-current" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Oil %</span><input id="owr-percent" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Volume (bbl)</span><input id="owr-volume" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Desired OWR</span><input id="owr-desired" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Oil Density (sg)</span><input id="owr-density" type="number" step="any" class={field} /></label>
+      </div>
+      <button data-calc="owr-adjust" class="js-run mt-4 rounded-md bg-brass px-5 py-2 font-semibold text-ink hover:bg-brass-soft">Calculate</button>
+      <ResultPanel id="owr-result" />
+    </div>
+
+    <!-- Slug -->
+    <div data-panel="slug" class="js-panel mt-8 hidden">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class={lbl}><span class={cap}>Pipe Length (m)</span><input id="slug-length" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Mud Weight (sg)</span><input id="slug-weight" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Pipe Capacity (bbl/m)</span><input id="slug-capacity" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Slug Volume (bbl)</span><input id="slug-volume" type="number" step="any" class={field} /></label>
+      </div>
+      <button data-calc="slug" class="js-run mt-4 rounded-md bg-brass px-5 py-2 font-semibold text-ink hover:bg-brass-soft">Calculate</button>
+      <ResultPanel id="slug-result" />
+    </div>
+  </section>
+
+  <script>
+    import { bariteRequired, addKnownBarite, cutWeight, mixFluids, owrAdjust, slugCalc } from '../../lib/calculators/mud';
+    const n = (id: string) => parseFloat((document.getElementById(id) as HTMLInputElement).value);
+    const chk = (id: string) => (document.getElementById(id) as HTMLInputElement).checked;
+
+    document.querySelectorAll<HTMLButtonElement>('.js-tab').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.js-tab').forEach((b) => b.setAttribute('aria-selected', 'false'));
+        btn.setAttribute('aria-selected', 'true');
+        const id = btn.dataset.tab;
+        document.querySelectorAll<HTMLElement>('.js-panel').forEach((p) => p.classList.toggle('hidden', p.dataset.panel !== id));
+      });
+    });
+
+    const handlers: Record<string, () => any> = {
+      'barite-required': () => bariteRequired({ initialWeight: n('br-initial'), desiredWeight: n('br-desired'), volume: n('br-volume'), constantVolume: chk('br-constant') }),
+      'add-known-barite': () => addKnownBarite({ initialWeight: n('akb-initial'), volume: n('akb-volume'), bariteAdded: n('akb-barite') }),
+      'cut-weight': () => cutWeight({ initialWeight: n('cw-initial'), volume: n('cw-volume'), desiredWeight: n('cw-desired'), dilutionDensity: n('cw-dilution'), constantVolume: chk('cw-constant') }),
+      'mix-fluids': () => mixFluids({ fluids: [{ density: n('mf-d1'), volume: n('mf-v1') }, { density: n('mf-d2'), volume: n('mf-v2') }, { density: n('mf-d3'), volume: n('mf-v3') }] }),
+      'owr-adjust': () => owrAdjust({ currentOWR: n('owr-current'), oilPercent: n('owr-percent'), volume: n('owr-volume'), desiredOWR: n('owr-desired'), density: n('owr-density') }),
+      'slug': () => slugCalc({ pipeLength: n('slug-length'), mudWeight: n('slug-weight'), pipeCapacity: n('slug-capacity'), slugVolume: n('slug-volume') }),
+    };
+    const resultIds: Record<string, string> = {
+      'barite-required': 'br-result', 'add-known-barite': 'akb-result', 'cut-weight': 'cw-result',
+      'mix-fluids': 'mf-result', 'owr-adjust': 'owr-result', 'slug': 'slug-result',
+    };
+    document.querySelectorAll<HTMLButtonElement>('.js-run').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const calc = btn.dataset.calc!;
+        (window as any).renderResult(resultIds[calc], handlers[calc]());
+      });
+    });
+  </script>
+</BaseLayout>

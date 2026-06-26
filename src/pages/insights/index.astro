@@ -1,0 +1,15 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import InsightCard from '../../components/InsightCard.astro';
+const insights = (await getCollection('insights')).sort((a, b) => +b.data.date - +a.data.date);
+---
+<BaseLayout title="Insights" description="Technical articles and case studies from the ODS engineering team.">
+  <section class="max-w-7xl mx-auto px-5 py-20">
+    <SectionHeading eyebrow="Insights" title="Technical notes & case studies" />
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-12">
+      {insights.map((i) => <InsightCard title={i.data.title} excerpt={i.data.excerpt} date={i.data.date} tags={i.data.tags} href={`/insights/${i.id}`} />)}
+    </div>
+  </section>
+</BaseLayout>

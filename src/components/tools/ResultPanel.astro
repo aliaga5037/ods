@@ -1,0 +1,33 @@
+---
+interface Props { id: string; }
+const { id } = Astro.props;
+---
+<div id={id} class="mt-6 hidden rounded-xl border border-brass/20 bg-navy/60 p-5" role="status" aria-live="polite">
+  <p class="js-error hidden text-sm font-medium text-brass-soft"></p>
+  <dl class="js-values grid gap-2 text-sm"></dl>
+  <ul class="js-notes mt-3 hidden list-disc space-y-1 pl-5 text-xs text-text-muted"></ul>
+  <ul class="js-warnings mt-3 hidden list-disc space-y-1 pl-5 text-xs text-brass-soft"></ul>
+</div>
+<script>
+  // Shared renderer: window.renderResult(panelId, CalcResult)
+  // Defined once; safe to include on every tool page.
+  (window as any).renderResult = function (panelId: string, r: any) {
+    const panel = document.getElementById(panelId);
+    if (!panel) return;
+    const err = panel.querySelector('.js-error') as HTMLElement;
+    const values = panel.querySelector('.js-values') as HTMLElement;
+    const notes = panel.querySelector('.js-notes') as HTMLElement;
+    const warnings = panel.querySelector('.js-warnings') as HTMLElement;
+    panel.classList.remove('hidden');
+    values.innerHTML = ''; notes.innerHTML = ''; warnings.innerHTML = '';
+    notes.classList.add('hidden'); warnings.classList.add('hidden'); err.classList.add('hidden');
+    if (!r.ok) { err.textContent = r.error || 'Invalid input'; err.classList.remove('hidden'); return; }
+    for (const v of r.values) {
+      const dt = document.createElement('dt'); dt.className = 'text-text-muted'; dt.textContent = v.label;
+      const dd = document.createElement('dd'); dd.className = 'font-semibold text-white mb-1'; dd.textContent = v.value;
+      values.appendChild(dt); values.appendChild(dd);
+    }
+    if (r.notes?.length) { notes.classList.remove('hidden'); for (const n of r.notes) { const li = document.createElement('li'); li.textContent = n; notes.appendChild(li); } }
+    if (r.warnings?.length) { warnings.classList.remove('hidden'); for (const w of r.warnings) { const li = document.createElement('li'); li.textContent = w; warnings.appendChild(li); } }
+  };
+</script>

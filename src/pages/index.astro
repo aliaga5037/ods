@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import StatBar from '../components/StatBar.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import InsightCard from '../components/InsightCard.astro';
+import OperatorLogos from '../components/OperatorLogos.astro';
+import CTA from '../components/CTA.astro';
+
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const featured = (await getCollection('projects'))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => b.data.year - a.data.year || a.data.title.localeCompare(b.data.title));
+const insights = (await getCollection('insights')).sort((a, b) => +b.data.date - +a.data.date).slice(0, 3);
+---
+<BaseLayout>
+  <Hero />
+  <StatBar />
+
+  <section class="max-w-7xl mx-auto px-5 py-24">
+    <SectionHeading eyebrow="What we do" title="Engineering-led drilling fluid solutions"
+      sub="Engineering and consultancy first — materials and field services second." />
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-12">
+      {services.map((s) => <ServiceCard title={s.data.title} summary={s.data.summary} icon={s.data.icon} href={`/services/${s.id}`} />)}
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-5 py-8">
+    <SectionHeading eyebrow="Track record" title="Selected projects" />
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-12">
+      {featured.map((p) => <ProjectCard title={p.data.title} operator={p.data.operator} fluidType={p.data.fluidType} year={p.data.year} location={p.data.location} outcome={p.data.outcome} href={`/projects/${p.id}`} />)}
+    </div>
+  </section>
+
+  <OperatorLogos />
+
+  <section class="max-w-7xl mx-auto px-5 py-8">
+    <SectionHeading eyebrow="Insights" title="Technical notes & case studies" />
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-12">
+      {insights.map((i) => <InsightCard title={i.data.title} excerpt={i.data.excerpt} date={i.data.date} tags={i.data.tags} href={`/insights/${i.id}`} />)}
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>

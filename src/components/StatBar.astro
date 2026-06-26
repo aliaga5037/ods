@@ -1,0 +1,13 @@
+---
+import { stats } from '../data/site';
+---
+<section class="bg-navy border-y border-brass/25">
+  <div class="max-w-7xl mx-auto px-5 grid grid-cols-2 md:grid-cols-4 md:divide-x md:divide-brass/15">
+    {stats.map((s) => (
+      <div class="py-8 text-center">
+        <div class="text-3xl md:text-4xl font-bold text-brass font-display">{s.value}</div>
+        <div class="text-xs tracking-widest uppercase text-text-muted mt-2">{s.label}</div>
+      </div>
+    ))}
+  </div>
+</section>

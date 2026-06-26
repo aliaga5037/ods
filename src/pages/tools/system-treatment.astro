@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import ToolTabs from '../../components/tools/ToolTabs.astro';
+import ResultPanel from '../../components/tools/ResultPanel.astro';
+import { CONTAINERS } from '../../lib/calculators/treatment';
+const tabs = [
+  { id: 'add-light-premix', label: 'Add Light Premix' },
+  { id: 'maintain-concentration', label: 'Maintain Concentration' },
+];
+const field = 'mt-1 w-full rounded-md border border-brass/20 bg-ink px-3 py-2 text-white';
+const lbl = 'block text-sm'; const cap = 'text-xs uppercase tracking-wide text-text-muted';
+---
+<BaseLayout title="System Treatment" description="Add light premix and maintain chemical concentration in the active drilling-fluid system.">
+  <section class="max-w-3xl mx-auto px-5 py-20">
+    <SectionHeading eyebrow="Tools" title="System Treatment" sub="Plan dilution and chemical maintenance for the active system." />
+    <div class="mt-10"><ToolTabs tabs={tabs} /></div>
+
+    <div data-panel="add-light-premix" class="js-panel mt-8">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class={lbl}><span class={cap}>System Volume (bbl)</span><input id="alp-volume" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Pump Rate (gpm)</span><input id="alp-pump" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Current Weight (sg)</span><input id="alp-current" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Desired Weight (sg)</span><input id="alp-desired" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Premix Density (sg)</span><input id="alp-premix" type="number" step="any" class={field} /></label>
+      </div>
+      <button data-calc="add-light-premix" class="js-run mt-4 rounded-md bg-brass px-5 py-2 font-semibold text-ink hover:bg-brass-soft">Calculate</button>
+      <ResultPanel id="alp-result" />
+    </div>
+
+    <div data-panel="maintain-concentration" class="js-panel mt-8 hidden">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class={lbl}><span class={cap}>System Volume (bbl)</span><input id="mc-volume" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Pump Rate (gpm)</span><input id="mc-pump" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Container Type</span>
+          <select id="mc-container" class={field}>{CONTAINERS.map((c) => <option value={c.id}>{c.label}</option>)}</select>
+        </label>
+        <label class={lbl}><span class={cap}>Custom Capacity (kg, optional)</span><input id="mc-custom" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Chemical Density (sg)</span><input id="mc-density" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Current Concentration (lb/bbl)</span><input id="mc-current" type="number" step="any" class={field} /></label>
+        <label class={lbl}><span class={cap}>Desired Concentration (lb/bbl)</span><input id="mc-desired" type="number" step="any" class={field} /></label>
+      </div>
+      <button data-calc="maintain-concentration" class="js-run mt-4 rounded-md bg-brass px-5 py-2 font-semibold text-ink hover:bg-brass-soft">Calculate</button>
+      <ResultPanel id="mc-result" />
+    </div>
+  </section>
+
+  <script>
+    import { addLightPremix, maintainConcentration } from '../../lib/calculators/treatment';
+    const n = (id: string) => parseFloat((document.getElementById(id) as HTMLInputElement).value);
+    const val = (id: string) => (document.getElementById(id) as HTMLInputElement).value;
+
+    document.querySelectorAll<HTMLButtonElement>('.js-tab').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.js-tab').forEach((b) => b.setAttribute('aria-selected', 'false'));
+        btn.setAttribute('aria-selected', 'true');
+        const id = btn.dataset.tab;
+        document.querySelectorAll<HTMLElement>('.js-panel').forEach((p) => p.classList.toggle('hidden', p.dataset.panel !== id));
+      });
+    });
+
+    const handlers: Record<string, () => any> = {
+      'add-light-premix': () => addLightPremix({ volume: n('alp-volume'), pumpRate: n('alp-pump'), currentWeight: n('alp-current'), desiredWeight: n('alp-desired'), premixDensity: n('alp-premix') }),
+      'maintain-concentration': () => maintainConcentration({ volume: n('mc-volume'), pumpRate: n('mc-pump'), containerType: val('mc-container'), customCapacity: n('mc-custom'), chemicalDensity: n('mc-density'), currentConcentration: n('mc-current'), desiredConcentration: n('mc-desired') }),
+    };
+    const resultIds: Record<string, string> = { 'add-light-premix': 'alp-result', 'maintain-concentration': 'mc-result' };
+    document.querySelectorAll<HTMLButtonElement>('.js-run').forEach((btn) => {
+      btn.addEventListener('click', () => { const c = btn.dataset.calc!; (window as any).renderResult(resultIds[c], handlers[c]()); });
+    });
+  </script>
+</BaseLayout>

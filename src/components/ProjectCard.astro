@@ -1,0 +1,13 @@
+---
+interface Props { title: string; operator: string; fluidType: string; year: number; location: string; outcome: string; href: string; }
+const { title, operator, fluidType, year, location, outcome, href } = Astro.props;
+---
+<a href={href} class="block bg-navy/60 border border-brass/15 rounded-xl p-6 hover:border-brass/50 transition-colors" data-operator={operator}>
+  <div class="flex items-center justify-between text-xs">
+    <span class="text-brass font-semibold tracking-wide uppercase">{operator}</span>
+    <span class="text-text-muted">{fluidType} · {year}</span>
+  </div>
+  <h3 class="text-lg font-semibold text-white mt-3">{title}</h3>
+  <p class="text-text-muted text-sm mt-1">{location}</p>
+  <p class="text-text-light text-sm mt-3">{outcome}</p>
+</a>

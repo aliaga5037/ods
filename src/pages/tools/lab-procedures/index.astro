@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SectionHeading from '../../../components/SectionHeading.astro';
+const procedures = (await getCollection('procedures')).sort((a, b) => a.data.order - b.data.order);
+const categories = [...new Set(procedures.map((p) => p.data.category))].sort();
+---
+<BaseLayout title="Lab Procedures" description="Reference sheets for standard drilling-fluid laboratory tests.">
+  <section class="max-w-5xl mx-auto px-5 py-20">
+    <SectionHeading eyebrow="Tools" title="Lab Procedures" sub="Standard drilling-fluid laboratory test references." />
+    <div class="mt-8 flex flex-wrap gap-2">
+      <button type="button" data-filter="all" class="js-filter rounded-md border border-brass/20 px-3 py-1.5 text-sm text-text-light aria-pressed:bg-brass aria-pressed:text-ink" aria-pressed="true">All</button>
+      {categories.map((c) => (
+        <button type="button" data-filter={c} class="js-filter rounded-md border border-brass/20 px-3 py-1.5 text-sm text-text-light aria-pressed:bg-brass aria-pressed:text-ink" aria-pressed="false">{c.replace('-', ' ')}</button>
+      ))}
+    </div>
+    <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {procedures.map((p) => (
+        <a href={`/tools/lab-procedures/${p.id}`} data-cat={p.data.category}
+           class="js-card block rounded-xl border border-brass/15 bg-navy/60 p-5 hover:border-brass/50 transition-colors">
+          <div class="text-xs uppercase tracking-wide text-brass">{p.data.category.replace('-', ' ')}</div>
+          <h3 class="mt-2 font-semibold text-white">{p.data.title}</h3>
+          <p class="mt-1 text-sm text-text-muted">{p.data.summary}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+  <script>
+    const filters = document.querySelectorAll<HTMLButtonElement>('.js-filter');
+    const cards = document.querySelectorAll<HTMLElement>('.js-card');
+    filters.forEach((f) => f.addEventListener('click', () => {
+      filters.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+      f.setAttribute('aria-pressed', 'true');
+      const want = f.dataset.filter;
+      cards.forEach((c) => c.classList.toggle('hidden', want !== 'all' && c.dataset.cat !== want));
+    }));
+  </script>
+</BaseLayout>
