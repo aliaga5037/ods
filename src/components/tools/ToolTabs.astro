@@ -1,0 +1,12 @@
+---
+interface Props { tabs: { id: string; label: string }[]; }
+const { tabs } = Astro.props;
+---
+<div class="flex flex-wrap gap-2" role="tablist">
+  {tabs.map((t, i) => (
+    <button type="button" data-tab={t.id} role="tab" aria-selected={i === 0 ? 'true' : 'false'}
+      class="js-tab rounded-md border border-brass/20 px-4 py-2 text-sm text-text-light transition-colors hover:border-brass/50 aria-selected:bg-brass aria-selected:text-ink aria-selected:font-semibold">
+      {t.label}
+    </button>
+  ))}
+</div>

@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import ToolCard from '../../components/tools/ToolCard.astro';
+const tools = [
+  { title: 'Unit Conversions', summary: 'Length, volume, pressure, temperature, weight and density — including bbl↔m³ and SG↔ppg.', icon: 'convert', href: '/tools/unit-conversions' },
+  { title: 'Mud Calculations', summary: 'Barite weight-up, dilution, fluid mixing, OWR adjustment and slug design.', icon: 'mud', href: '/tools/mud-calculations' },
+  { title: 'System Treatment', summary: 'Add light premix and maintain chemical concentration across the active system.', icon: 'treatment', href: '/tools/system-treatment' },
+  { title: 'Lab Procedures', summary: 'Reference sheets for standard drilling-fluid laboratory tests.', icon: 'lab', href: '/tools/lab-procedures' },
+  { title: 'Product Datasheets', summary: 'Searchable catalog of drilling-fluid products and their datasheets.', icon: 'products', href: '/tools/products' },
+];
+---
+<BaseLayout title="Tools" description="Engineering calculators and reference tools for drilling-fluids work from ODS.">
+  <section class="max-w-7xl mx-auto px-5 py-20">
+    <SectionHeading eyebrow="Tools" title="Engineering calculators & references"
+      sub="Field-ready calculators and laboratory references for drilling-fluids work." />
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-12">
+      {tools.map((t) => <ToolCard {...t} />)}
+    </div>
+  </section>
+</BaseLayout>
