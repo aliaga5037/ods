@@ -20,13 +20,19 @@ const videoSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loo
   )}
   {videoId && (
     <div class="absolute inset-0 z-[1] overflow-hidden pointer-events-none" aria-hidden="true">
+      {/* Iframe is oversized (scale-[1.45]) so YouTube's player chrome — control
+          bar, title and play button that flash during load — is pushed outside
+          the overflow-hidden container and never shows. */}
       <iframe
-        class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[177.78vh] min-w-full h-[56.25vw] min-h-full border-0"
+        id="hero-video"
+        class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-[1.45] w-[177.78vh] min-w-full h-[56.25vw] min-h-full border-0 opacity-0 transition-opacity duration-700"
         src={videoSrc}
         title="Rig site drilling background"
         allow="autoplay; encrypted-media; picture-in-picture"
         referrerpolicy="strict-origin-when-cross-origin"
         tabindex="-1"></iframe>
+      {/* Transparent click/hover shield so no controls can ever be triggered. */}
+      <div class="absolute inset-0"></div>
     </div>
   )}
   {/* Directional scrim: dark behind the text (left), clearer on the right so the
@@ -44,6 +50,17 @@ const videoSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loo
       </div>
     </div>
   </div>
+
+  <script>
+    // Keep the YouTube iframe hidden until its loading chrome (center play/pause
+    // overlay, control bar) has cleared, then fade it in over the gradient.
+    const video = document.getElementById('hero-video') as HTMLIFrameElement | null;
+    if (video) {
+      const reveal = () => { video.style.opacity = '1'; };
+      video.addEventListener('load', () => setTimeout(reveal, 1800));
+      setTimeout(reveal, 4000); // fallback if the load event timing is missed
+    }
+  </script>
 
   <script>
     const canvas = document.getElementById('hero-particles') as HTMLCanvasElement | null;
