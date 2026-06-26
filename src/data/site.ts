@@ -36,3 +36,23 @@ export const stats = [
 export const operators = ['SOCAR', 'BP', 'Azorel', 'GL Group', 'GLOLYNX', 'DH', 'Azeri-MI', 'Swire'];
 
 export const certifications = ['ISO 9001:2015', 'ISO 14001:2015', 'ISO 45001:2018', 'API Spec Q2 (target 2026)'];
+
+// "Why ODS" differentiators shown on the homepage. Edit freely — title + supporting line each.
+export const differentiators = [
+  {
+    title: 'Built to perform under pressure',
+    body: 'Drilling fluids designed to hold up under pressure and changing well conditions, not just in the lab.',
+  },
+  {
+    title: 'Engineers who know the rig',
+    body: 'Field engineers who understand the realities of the rig floor, not only the data sheet.',
+  },
+  {
+    title: 'Proactive risk management',
+    body: 'We manage mud properties ahead of trouble to protect the wellbore and reduce operational risk.',
+  },
+  {
+    title: 'Accountable execution',
+    body: 'Dependable delivery, technical accountability and results you can measure and trust.',
+  },
+];

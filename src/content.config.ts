@@ -45,6 +45,13 @@ export const productSchema = z.object({
   datasheet: z.string().optional().describe('path under /public/datasheets, e.g. /datasheets/lime.pdf; omit until the PDF exists'),
 });
 
+export const teamSchema = z.object({
+  name: z.string(),
+  role: z.string().describe('job title shown under the name'),
+  order: z.number().describe('display order, ascending'),
+  photo: z.string().optional().describe('path under /public/images/team, e.g. /images/team/jane-doe.jpg; omit to show an initials avatar until a photo is uploaded'),
+});
+
 // Pattern excludes files beginning with `_` (e.g. _template.md) so templates
 // never become collection entries / generated pages. The glob loader does NOT
 // auto-ignore underscore files, so this must be explicit.
@@ -53,5 +60,6 @@ const projects = defineCollection({ loader: glob({ pattern: '**/[^_]*.md', base:
 const insights = defineCollection({ loader: glob({ pattern: '**/[^_]*.md', base: './src/content/insights' }), schema: insightSchema });
 const procedures = defineCollection({ loader: glob({ pattern: '**/[^_]*.md', base: './src/content/procedures' }), schema: procedureSchema });
 const products = defineCollection({ loader: glob({ pattern: '**/[^_]*.md', base: './src/content/products' }), schema: productSchema });
+const team = defineCollection({ loader: glob({ pattern: '**/[^_]*.md', base: './src/content/team' }), schema: teamSchema });
 
-export const collections = { services, projects, insights, procedures, products };
+export const collections = { services, projects, insights, procedures, products, team };

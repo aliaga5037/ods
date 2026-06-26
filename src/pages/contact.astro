@@ -30,6 +30,18 @@ const wa = `https://wa.me/${contact.whatsapp}`;
         <input name="company" placeholder="Company" class="w-full bg-navy border border-brass/25 rounded-md px-4 py-3 text-white placeholder:text-text-muted" />
       </label>
       <label class="block">
+        <span class="sr-only">Subject</span>
+        <select name="subject" class="w-full bg-navy border border-brass/25 rounded-md px-4 py-3 text-white">
+          <option value="" disabled selected>What is this about?</option>
+          <option>General enquiry</option>
+          <option>Technical support</option>
+          <option>Product inquiry</option>
+          <option>Services information</option>
+          <option>Request a quote</option>
+          <option>Partnership opportunity</option>
+        </select>
+      </label>
+      <label class="block">
         <span class="sr-only">Message</span>
         <textarea name="message" required rows="5" placeholder="How can we help?" class="w-full bg-navy border border-brass/25 rounded-md px-4 py-3 text-white placeholder:text-text-muted"></textarea>
       </label>

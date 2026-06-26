@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { projectSchema, serviceSchema, insightSchema, procedureSchema, productSchema } from './content.config';
+import { projectSchema, serviceSchema, insightSchema, procedureSchema, productSchema, teamSchema } from './content.config';
 
 describe('projectSchema', () => {
   it('accepts a valid project', () => {
@@ -52,5 +52,17 @@ describe('productSchema', () => {
   });
   it('accepts a product with a datasheet path', () => {
     expect(productSchema.safeParse({ name: 'Lime', category: 'alkalinity', order: 2, datasheet: '/datasheets/lime.pdf' }).success).toBe(true);
+  });
+});
+
+describe('teamSchema', () => {
+  it('accepts a member without a photo', () => {
+    expect(teamSchema.safeParse({ name: 'Jane Doe', role: 'Mud Engineer', order: 1 }).success).toBe(true);
+  });
+  it('accepts a member with a photo path', () => {
+    expect(teamSchema.safeParse({ name: 'Jane Doe', role: 'Mud Engineer', order: 1, photo: '/images/team/jane-doe.jpg' }).success).toBe(true);
+  });
+  it('requires name and role', () => {
+    expect(teamSchema.safeParse({ name: 'Jane Doe', order: 1 }).success).toBe(false);
   });
 });

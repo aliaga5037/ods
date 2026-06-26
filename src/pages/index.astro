@@ -9,6 +9,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 import InsightCard from '../components/InsightCard.astro';
 import OperatorLogos from '../components/OperatorLogos.astro';
 import CTA from '../components/CTA.astro';
+import { differentiators } from '../data/site';
 
 const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
 const featured = (await getCollection('projects'))
@@ -36,6 +37,21 @@ const insights = (await getCollection('insights')).sort((a, b) => +b.data.date -
   </section>
 
   <OperatorLogos />
+
+  <section class="max-w-7xl mx-auto px-5 py-16">
+    <SectionHeading eyebrow="Why ODS" title="Why operators choose ODS" />
+    <div class="grid gap-6 sm:grid-cols-2 mt-12">
+      {differentiators.map((d) => (
+        <div class="flex gap-4 bg-navy/60 border border-brass/15 rounded-xl p-6">
+          <span class="text-brass text-xl leading-none mt-0.5" aria-hidden="true">◆</span>
+          <div>
+            <h3 class="text-lg font-semibold text-white">{d.title}</h3>
+            <p class="text-text-muted text-sm mt-1">{d.body}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
 
   <section class="max-w-7xl mx-auto px-5 py-8">
     <SectionHeading eyebrow="Insights" title="Technical notes & case studies" />

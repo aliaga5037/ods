@@ -1,9 +1,17 @@
 ---
+import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import StatBar from '../components/StatBar.astro';
 import CTA from '../components/CTA.astro';
 import { certifications } from '../data/site';
+
+const teamEntries = (await getCollection('team')).sort((a, b) => a.data.order - b.data.order);
+const team = await Promise.all(
+  teamEntries.map(async (m) => ({ data: m.data, Content: (await render(m)).Content })),
+);
+const initials = (name: string) =>
+  name.trim().split(/\s+/).slice(0, 2).map((w) => w[0]?.toUpperCase() ?? '').join('');
 
 const approach = [
   ['Real-time engineering', 'Decisions made at the wellsite from live data, not from a desk.'],
@@ -35,5 +43,23 @@ const approach = [
       </div>
     </div>
   </section>
+  {team.length > 0 && (
+    <section class="max-w-7xl mx-auto px-5 py-20">
+      <SectionHeading eyebrow="Our team" title="Meet the team"
+        sub="Experienced drilling and completion fluids professionals behind ODS." />
+      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 mt-12">
+        {team.map((m) => (
+          <article class="text-center">
+            {m.data.photo
+              ? <img src={m.data.photo} alt={m.data.name} loading="lazy" class="mx-auto h-28 w-28 rounded-full object-cover border border-brass/30" />
+              : <div class="mx-auto h-28 w-28 rounded-full border border-brass/30 bg-navy flex items-center justify-center font-display text-2xl font-bold text-brass" aria-hidden="true">{initials(m.data.name)}</div>}
+            <h3 class="mt-4 font-semibold text-white">{m.data.name}</h3>
+            <p class="text-brass text-sm">{m.data.role}</p>
+            <div class="text-text-muted text-sm mt-2 [&_p]:mt-1"><m.Content /></div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
   <CTA />
 </BaseLayout>
