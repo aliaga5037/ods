@@ -4,7 +4,10 @@ import { site, contact, nav, certifications } from '../data/site';
 <footer class="bg-navy border-t border-brass/20 mt-24">
   <div class="max-w-7xl mx-auto px-5 py-14 grid gap-10 md:grid-cols-3">
     <div>
-      <div class="font-display font-bold text-white text-lg">◆ {site.legalName}</div>
+      <div class="flex items-center gap-3">
+        <img src="/images/logo.jpeg" alt="" class="h-11 w-auto object-contain rounded-sm" />
+        <span class="font-display font-bold text-white text-lg">{site.legalName}</span>
+      </div>
       <p class="text-text-muted text-sm mt-3 max-w-xs">{site.tagline}</p>
     </div>
     <div>

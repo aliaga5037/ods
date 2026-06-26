@@ -14,6 +14,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>document.documentElement.classList.add('js')</script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
@@ -33,5 +34,43 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <Nav />
     <main id="main-content" class="flex-1"><slot /></main>
     <Footer />
+
+    <button id="to-top" aria-label="Back to top"
+      class="fixed bottom-6 right-6 z-40 h-11 w-11 rounded-full bg-brass text-ink shadow-lg flex items-center justify-center text-xl font-bold hover:bg-brass-soft">↑</button>
+
+    <script>
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Scroll-reveal
+      const revealEls = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if (revealEls.length) {
+        const io = new IntersectionObserver((entries, obs) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              const el = e.target as HTMLElement;
+              const delay = el.dataset.revealDelay;
+              if (delay) el.style.transitionDelay = `${delay}ms`;
+              el.classList.add('is-revealed');
+              obs.unobserve(el);
+            }
+          }
+        }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+        revealEls.forEach((el) => io.observe(el));
+      }
+
+      // Header on scroll
+      const header = document.getElementById('site-header');
+      const onScrollHeader = () => header?.classList.toggle('scrolled', window.scrollY > 50);
+
+      // Back to top
+      const toTop = document.getElementById('to-top');
+      const onScrollTop = () => toTop?.classList.toggle('show', window.scrollY > 400);
+      toTop?.addEventListener('click', () =>
+        window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }));
+
+      const onScroll = () => { onScrollHeader(); onScrollTop(); };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    </script>
   </body>
 </html>

@@ -1,13 +1,50 @@
 ---
 import { stats } from '../data/site';
 ---
-<section class="bg-navy border-y border-brass/25">
+<section id="stat-bar" class="bg-navy border-y border-brass/25">
   <div class="max-w-7xl mx-auto px-5 grid grid-cols-2 md:grid-cols-4 md:divide-x md:divide-brass/15">
     {stats.map((s) => (
       <div class="py-8 text-center">
-        <div class="text-3xl md:text-4xl font-bold text-brass font-display">{s.value}</div>
+        <div class="js-stat text-3xl md:text-4xl font-bold text-brass font-display" data-value={s.value}>{s.value}</div>
         <div class="text-xs tracking-widest uppercase text-text-muted mt-2">{s.label}</div>
       </div>
     ))}
   </div>
 </section>
+
+<script>
+  import { parseStat } from '../lib/stats';
+
+  const section = document.getElementById('stat-bar');
+  const els = Array.from(document.querySelectorAll<HTMLElement>('.js-stat'));
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const animate = (el: HTMLElement) => {
+    const parsed = parseStat(el.dataset.value || el.textContent || '');
+    if (parsed.kind !== 'number') return; // non-numeric (e.g. "API") stays as-is
+    const { prefix, number, suffix } = parsed;
+    const duration = 1200;
+    const start = performance.now();
+    const step = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
+      el.textContent = `${prefix}${Math.round(number * eased)}${suffix}`;
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+
+  if (section && els.length) {
+    if (reduce) {
+      // leave final values in place
+    } else {
+      els.forEach((el) => { const p = parseStat(el.dataset.value || ''); if (p.kind === 'number') el.textContent = `${p.prefix}0${p.suffix}`; });
+      const io = new IntersectionObserver((entries, obs) => {
+        for (const e of entries) {
+          if (e.isIntersecting) { els.forEach(animate); obs.disconnect(); }
+        }
+      }, { threshold: 0.4 });
+      io.observe(section);
+    }
+  }
+</script>

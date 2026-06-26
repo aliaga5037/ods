@@ -24,14 +24,14 @@ const insights = (await getCollection('insights')).sort((a, b) => +b.data.date -
   <section class="max-w-7xl mx-auto px-5 py-24">
     <SectionHeading eyebrow="What we do" title="Engineering-led drilling fluid solutions"
       sub="Engineering and consultancy first — materials and field services second." />
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-12">
+    <div data-reveal class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-12">
       {services.map((s) => <ServiceCard title={s.data.title} summary={s.data.summary} icon={s.data.icon} href={`/services/${s.id}`} />)}
     </div>
   </section>
 
   <section class="max-w-7xl mx-auto px-5 py-8">
     <SectionHeading eyebrow="Track record" title="Selected projects" />
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-12">
+    <div data-reveal class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-12">
       {featured.map((p) => <ProjectCard title={p.data.title} operator={p.data.operator} fluidType={p.data.fluidType} year={p.data.year} location={p.data.location} outcome={p.data.outcome} href={`/projects/${p.id}`} />)}
     </div>
   </section>
@@ -41,8 +41,8 @@ const insights = (await getCollection('insights')).sort((a, b) => +b.data.date -
   <section class="max-w-7xl mx-auto px-5 py-16">
     <SectionHeading eyebrow="Why ODS" title="Why operators choose ODS" />
     <div class="grid gap-6 sm:grid-cols-2 mt-12">
-      {differentiators.map((d) => (
-        <div class="flex gap-4 bg-navy/60 border border-brass/15 rounded-xl p-6">
+      {differentiators.map((d, i) => (
+        <div data-reveal data-reveal-delay={i * 80} class="flex gap-4 bg-navy/60 border border-brass/15 rounded-xl p-6">
           <span class="text-brass text-xl leading-none mt-0.5" aria-hidden="true">◆</span>
           <div>
             <h3 class="text-lg font-semibold text-white">{d.title}</h3>
@@ -55,7 +55,7 @@ const insights = (await getCollection('insights')).sort((a, b) => +b.data.date -
 
   <section class="max-w-7xl mx-auto px-5 py-8">
     <SectionHeading eyebrow="Insights" title="Technical notes & case studies" />
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-12">
+    <div data-reveal class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-12">
       {insights.map((i) => <InsightCard title={i.data.title} excerpt={i.data.excerpt} date={i.data.date} tags={i.data.tags} href={`/insights/${i.id}`} />)}
     </div>
   </section>

@@ -2,9 +2,12 @@
 import { nav, site } from '../data/site';
 import MobileNav from './MobileNav.astro';
 ---
-<header class="sticky top-0 z-40 bg-ink/80 backdrop-blur border-b border-brass/20">
-  <nav class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
-    <a href="/" class="font-display font-bold tracking-wide text-white text-lg">◆ {site.name}</a>
+<header id="site-header" class="sticky top-0 z-40 bg-ink/80 backdrop-blur border-b border-brass/20">
+  <nav class="nav-inner max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2.5" aria-label={`${site.name} home`}>
+      <img src="/images/logo.jpeg" alt="" class="h-9 w-auto object-contain rounded-sm" />
+      <span class="font-display font-bold tracking-wide text-white text-lg">{site.name}</span>
+    </a>
     <div class="hidden md:flex items-center gap-8 text-sm">
       {nav.map((item) => (
         <a href={item.href} class="text-text-light hover:text-brass transition-colors">{item.label}</a>

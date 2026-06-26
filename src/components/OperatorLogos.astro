@@ -1,9 +1,14 @@
 ---
 import { operators } from '../data/site';
+// Duplicate the list so the marquee can loop seamlessly (track translates -50%).
+const loop = [...operators, ...operators];
 ---
 <section class="max-w-7xl mx-auto px-5 py-16">
   <p class="text-center text-xs uppercase tracking-[0.3em] text-text-muted mb-8">Trusted on operations for</p>
-  <div class="flex flex-wrap justify-center gap-x-12 gap-y-6 opacity-80">
-    {operators.map((o) => <span class="font-display text-xl text-text-light">{o}</span>)}
+  <div class="marquee relative opacity-80 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+    <div class="marquee__track gap-x-12 pr-12">
+      {loop.map((o) => <span class="font-display text-xl text-text-light whitespace-nowrap" aria-hidden="true">{o}</span>)}
+    </div>
   </div>
+  <span class="sr-only">Operators served: {operators.join(', ')}</span>
 </section>

@@ -17,6 +17,32 @@ html { scroll-behavior: smooth; }
 body { background-color: var(--color-ink); color: var(--color-text-light); font-family: var(--font-body); }
 h1,h2,h3 { font-family: var(--font-display); color: #fff; }
 
+/* --- Scroll reveal (active only once JS adds .js to <html>; visible otherwise) --- */
+html.js [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+html.js [data-reveal].is-revealed { opacity: 1; transform: none; }
+
+/* --- Hero entrance --- */
+@keyframes ods-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.hero-rise { opacity: 0; animation: ods-rise .7s ease forwards; }
+
+/* --- Operator logos marquee --- */
+@keyframes ods-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee { overflow: hidden; }
+.marquee__track { display: flex; width: max-content; animation: ods-marquee 32s linear infinite; }
+.marquee:hover .marquee__track { animation-play-state: paused; }
+
+/* --- Header on scroll --- */
+#site-header { transition: background-color .3s ease, box-shadow .3s ease; }
+#site-header.scrolled { background-color: rgba(0,0,0,0.92); box-shadow: 0 1px 0 rgba(184,134,59,0.25); }
+#site-header .nav-inner { transition: height .3s ease; }
+#site-header.scrolled .nav-inner { height: 3.25rem; }
+
+/* --- Scroll-to-top button --- */
+#to-top { opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity .3s ease, transform .3s ease; }
+#to-top.show { opacity: 1; pointer-events: auto; transform: none; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  html.js [data-reveal] { opacity: 1 !important; transform: none !important; }
+  .hero-rise { opacity: 1 !important; }
 }
