@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import ToolTabs from '../../components/tools/ToolTabs.astro';
+import { conversions } from '../../lib/calculators/units';
+
+const categories = Object.keys(conversions) as (keyof typeof conversions)[];
+const tabs = categories.map((c) => ({ id: c, label: c.charAt(0).toUpperCase() + c.slice(1) }));
+---
+<BaseLayout title="Unit Conversions" description="Convert drilling-fluid units: bbl↔m³, SG↔ppg, pressure, temperature and more.">
+  <section class="max-w-3xl mx-auto px-5 py-20">
+    <SectionHeading eyebrow="Tools" title="Unit Conversions" sub="Select a category, choose a conversion, enter a value." />
+    <div class="mt-10"><ToolTabs tabs={tabs} /></div>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2">
+      <label class="block">
+        <span class="text-xs uppercase tracking-wide text-text-muted">Conversion</span>
+        <select id="conversion-select" class="mt-1 w-full rounded-md border border-brass/20 bg-ink px-3 py-2 text-white"></select>
+      </label>
+      <label class="block">
+        <span class="text-xs uppercase tracking-wide text-text-muted">Value</span>
+        <input id="conversion-input" type="number" step="any" class="mt-1 w-full rounded-md border border-brass/20 bg-ink px-3 py-2 text-white" />
+      </label>
+    </div>
+    <p id="conversion-result" class="mt-6 hidden rounded-xl border border-brass/20 bg-navy/60 p-5 text-lg font-semibold text-white"></p>
+  </section>
+
+  <script>
+    import { conversions, convert } from '../../lib/calculators/units';
+    type Cat = keyof typeof conversions;
+    let active: Cat = 'length';
+    const select = document.getElementById('conversion-select') as HTMLSelectElement;
+    const input = document.getElementById('conversion-input') as HTMLInputElement;
+    const result = document.getElementById('conversion-result') as HTMLElement;
+
+    function populate(cat: Cat) {
+      select.innerHTML = '';
+      for (const p of conversions[cat]) {
+        const o = document.createElement('option'); o.value = p.id; o.textContent = p.label; select.appendChild(o);
+      }
+    }
+    function run() {
+      const v = parseFloat(input.value);
+      if (Number.isNaN(v)) { result.classList.add('hidden'); return; }
+      const pair = conversions[active].find((p) => p.id === select.value)!;
+      const out = convert(active, select.value, v);
+      result.textContent = `${v} ${pair.from} = ${out.toFixed(4)} ${pair.to}`;
+      result.classList.remove('hidden');
+    }
+    document.querySelectorAll<HTMLButtonElement>('.js-tab').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.js-tab').forEach((b) => b.setAttribute('aria-selected', 'false'));
+        btn.setAttribute('aria-selected', 'true');
+        active = btn.dataset.tab as Cat;
+        populate(active); input.value = ''; result.classList.add('hidden');
+      });
+    });
+    select.addEventListener('change', run);
+    input.addEventListener('input', run);
+    populate(active);
+  </script>
+</BaseLayout>
