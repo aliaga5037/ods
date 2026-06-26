@@ -110,6 +110,7 @@ export function owrAdjust(i: { currentOWR: number; oilPercent: number; volume: n
         { label: 'New OWR', value: `${fixed(desiredOWR)} (${fixed(newOilPct, 1)}% oil)` },
         { label: 'Final Volume', value: `${fixed(volume + oilToAdd)} bbl` },
       ],
+      warnings: ['OWR interpretation (ratio vs. percent) and unused oil density — pending ODS engineer verification.'],
     };
   }
   const waterToAdd = Math.abs(oilToAdd) * (1 / desiredOWR);
@@ -120,6 +121,7 @@ export function owrAdjust(i: { currentOWR: number; oilPercent: number; volume: n
       { label: 'New OWR', value: `${fixed(desiredOWR)} (${fixed(newOilPct, 1)}% oil)` },
       { label: 'Final Volume', value: `${fixed(volume + waterToAdd)} bbl` },
     ],
+    warnings: ['OWR interpretation (ratio vs. percent) and unused oil density — pending ODS engineer verification.'],
   };
 }
 

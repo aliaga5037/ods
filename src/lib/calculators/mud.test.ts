@@ -44,7 +44,8 @@ describe('addKnownBarite', () => {
   it('increases mud weight', () => {
     const r = addKnownBarite({ initialWeight: 1.2, volume: 100, bariteAdded: 5 });
     expect(r.ok).toBe(true);
-    expect(num(r, 'New Mud Weight')).toBeGreaterThan(1.2);
+    expect(num(r, 'New Mud Weight')).toBeCloseTo(1.39, 2);
+    expect(num(r, 'Final Volume')).toBeCloseTo(106.80, 2);
   });
 });
 
@@ -52,6 +53,9 @@ describe('owrAdjust', () => {
   it('returns a result for a valid adjustment', () => {
     const r = owrAdjust({ currentOWR: 70, oilPercent: 70, volume: 100, desiredOWR: 80, density: 0.85 });
     expect(r.ok).toBe(true);
+    expect(num(r, 'Oil to Add')).toBeCloseTo(28.77, 2);
+    expect(num(r, 'Final Volume')).toBeCloseTo(128.77, 2);
+    expect(r.warnings?.some((w) => /verif/i.test(w))).toBe(true);
   });
 });
 
