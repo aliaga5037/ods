@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SectionHeading from '../../../components/SectionHeading.astro';
+const products = (await getCollection('products')).sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout title="Product Datasheets" description="Searchable catalog of ODS drilling-fluid products and datasheets.">
+  <section class="max-w-5xl mx-auto px-5 py-20">
+    <SectionHeading eyebrow="Tools" title="Product Datasheets" sub="Search the drilling-fluid product catalog." />
+    <input id="product-search" type="search" placeholder="Search products…"
+      class="mt-8 w-full rounded-md border border-brass/20 bg-ink px-4 py-2 text-white" />
+    <div id="product-grid" class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {products.map((p) => (
+        <div class="js-product rounded-xl border border-brass/15 bg-navy/60 p-5" data-name={p.data.name}>
+          <div class="text-xs uppercase tracking-wide text-brass">{p.data.category}</div>
+          <h3 class="js-product-name mt-2 font-semibold text-white">{p.data.name}</h3>
+          {p.data.datasheet
+            ? <a href={p.data.datasheet} target="_blank" rel="noopener" class="mt-3 inline-block text-sm font-medium text-brass hover:text-brass-soft">View datasheet →</a>
+            : <span class="mt-3 inline-block text-sm text-text-muted">Datasheet coming soon</span>}
+        </div>
+      ))}
+    </div>
+    <p id="product-empty" class="mt-8 hidden text-text-muted">No products match your search.</p>
+  </section>
+  <script>
+    const search = document.getElementById('product-search') as HTMLInputElement;
+    const cards = document.querySelectorAll<HTMLElement>('.js-product');
+    const empty = document.getElementById('product-empty') as HTMLElement;
+    const norm = (s: string) => s.toLowerCase().replace(/[-\s]/g, '');
+    search.addEventListener('input', () => {
+      const q = norm(search.value.trim());
+      let visible = 0;
+      cards.forEach((c) => {
+        const match = norm(c.dataset.name || '').includes(q);
+        c.classList.toggle('hidden', !match);
+        if (match) visible++;
+      });
+      empty.classList.toggle('hidden', visible !== 0);
+    });
+  </script>
+</BaseLayout>
