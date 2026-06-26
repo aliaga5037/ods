@@ -7,8 +7,14 @@ export async function getStaticPaths() {
 }
 const { procedure } = Astro.props;
 const { Content } = await render(procedure);
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Tools', url: '/tools' },
+  { name: 'Lab Procedures', url: '/tools/lab-procedures' },
+  { name: procedure.data.title, url: Astro.url.pathname },
+];
 ---
-<BaseLayout title={procedure.data.title} description={procedure.data.summary}>
+<BaseLayout title={procedure.data.title} description={procedure.data.summary} breadcrumbs={breadcrumbs}>
   <section class="max-w-3xl mx-auto px-5 py-20">
     <a href="/tools/lab-procedures" class="text-sm text-brass hover:text-brass-soft">← All procedures</a>
     <div class="mt-3 text-xs uppercase tracking-wide text-brass">{procedure.data.category.replace('-', ' ')}</div>

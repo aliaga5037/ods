@@ -8,8 +8,13 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const d = entry.data;
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Projects', url: '/projects' },
+  { name: d.title, url: Astro.url.pathname },
+];
 ---
-<BaseLayout title={d.title} description={d.outcome}>
+<BaseLayout title={d.title} description={d.outcome} breadcrumbs={breadcrumbs}>
   <article class="max-w-3xl mx-auto px-5 py-20">
     <div class="text-xs tracking-[0.3em] uppercase text-brass font-semibold mb-3">{d.operator} · {d.field}</div>
     <h1 class="text-4xl font-bold">{d.title}</h1>
