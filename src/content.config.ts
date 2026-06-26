@@ -30,11 +30,28 @@ export const insightSchema = z.object({
   cover: z.string().optional(),
 });
 
+export const procedureSchema = z.object({
+  title: z.string(),
+  category: z.enum(['mud-properties', 'rheology', 'filtration', 'solids', 'chemical', 'other'])
+    .describe('procedure category for filtering'),
+  order: z.number().describe('display order, ascending'),
+  summary: z.string().describe('one-line summary shown on the index'),
+});
+
+export const productSchema = z.object({
+  name: z.string(),
+  category: z.string().describe('product category for filtering, e.g. "alkalinity"'),
+  order: z.number().describe('display order, ascending'),
+  datasheet: z.string().optional().describe('path under /public/datasheets, e.g. /datasheets/lime.pdf; omit until the PDF exists'),
+});
+
 // Pattern excludes files beginning with `_` (e.g. _template.md) so templates
 // never become collection entries / generated pages. The glob loader does NOT
 // auto-ignore underscore files, so this must be explicit.
 const services = defineCollection({ loader: glob({ pattern: '**/[^_]*.md', base: './src/content/services' }), schema: serviceSchema });
 const projects = defineCollection({ loader: glob({ pattern: '**/[^_]*.md', base: './src/content/projects' }), schema: projectSchema });
 const insights = defineCollection({ loader: glob({ pattern: '**/[^_]*.md', base: './src/content/insights' }), schema: insightSchema });
+const procedures = defineCollection({ loader: glob({ pattern: '**/[^_]*.md', base: './src/content/procedures' }), schema: procedureSchema });
+const products = defineCollection({ loader: glob({ pattern: '**/[^_]*.md', base: './src/content/products' }), schema: productSchema });
 
-export const collections = { services, projects, insights };
+export const collections = { services, projects, insights, procedures, products };

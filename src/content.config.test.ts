@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { projectSchema, serviceSchema, insightSchema } from './content.config';
+import { projectSchema, serviceSchema, insightSchema, procedureSchema, productSchema } from './content.config';
 
 describe('projectSchema', () => {
   it('accepts a valid project', () => {
@@ -29,5 +29,28 @@ describe('serviceSchema', () => {
 describe('insightSchema', () => {
   it('requires a date and title', () => {
     expect(insightSchema.safeParse({ title: 'A', date: new Date('2026-01-01'), excerpt: 'x' }).success).toBe(true);
+  });
+});
+
+describe('procedureSchema', () => {
+  it('accepts a valid procedure', () => {
+    expect(procedureSchema.safeParse({
+      title: 'Mud Weight (Density)', category: 'mud-properties', order: 1,
+      summary: 'Measure drilling-fluid density with a mud balance.',
+    }).success).toBe(true);
+  });
+  it('rejects an invalid category', () => {
+    expect(procedureSchema.safeParse({
+      title: 'X', category: 'nonsense', order: 1, summary: 'y',
+    }).success).toBe(false);
+  });
+});
+
+describe('productSchema', () => {
+  it('accepts a product without a datasheet', () => {
+    expect(productSchema.safeParse({ name: 'Caustic Soda', category: 'alkalinity', order: 1 }).success).toBe(true);
+  });
+  it('accepts a product with a datasheet path', () => {
+    expect(productSchema.safeParse({ name: 'Lime', category: 'alkalinity', order: 2, datasheet: '/datasheets/lime.pdf' }).success).toBe(true);
   });
 });
