@@ -1,0 +1,20 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+export async function getStaticPaths() {
+  const procedures = await getCollection('procedures');
+  return procedures.map((p) => ({ params: { slug: p.id }, props: { procedure: p } }));
+}
+const { procedure } = Astro.props;
+const { Content } = await render(procedure);
+---
+<BaseLayout title={procedure.data.title} description={procedure.data.summary}>
+  <section class="max-w-3xl mx-auto px-5 py-20">
+    <a href="/tools/lab-procedures" class="text-sm text-brass hover:text-brass-soft">← All procedures</a>
+    <div class="mt-3 text-xs uppercase tracking-wide text-brass">{procedure.data.category.replace('-', ' ')}</div>
+    <h1 class="mt-2 text-3xl md:text-4xl font-bold">{procedure.data.title}</h1>
+    <div class="prose-tools mt-8 space-y-4 text-text-light [&_h2]:font-display [&_h2]:text-white [&_h2]:text-xl [&_h2]:mt-6 [&_ol]:list-decimal [&_ul]:list-disc [&_ol]:pl-5 [&_ul]:pl-5">
+      <Content />
+    </div>
+  </section>
+</BaseLayout>
