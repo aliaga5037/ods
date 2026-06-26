@@ -22,4 +22,7 @@ describe('maintainConcentration', () => {
     expect(r.ok).toBe(true);
     expect(num(r, 'Containers')).toBeCloseTo(27.22, 1);   // 3*500*0.453592/25
   });
+  it('rejects desired <= current concentration', () => {
+    expect(maintainConcentration({ volume: 500, pumpRate: 400, containerType: 'sack-25', customCapacity: NaN, chemicalDensity: 1.0, currentConcentration: 5, desiredConcentration: 5 }).ok).toBe(false);
+  });
 });

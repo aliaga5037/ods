@@ -33,6 +33,7 @@ export function addLightPremix(i: { volume: number; pumpRate: number; currentWei
 export function maintainConcentration(i: { volume: number; pumpRate: number; containerType: string; customCapacity: number; chemicalDensity: number; currentConcentration: number; desiredConcentration: number }): CalcResult {
   const { volume, pumpRate, containerType, customCapacity, chemicalDensity, currentConcentration, desiredConcentration } = i;
   if ([volume, pumpRate, chemicalDensity, currentConcentration, desiredConcentration].some(Number.isNaN)) return fail('Please fill in all required fields.');
+  if (desiredConcentration <= currentConcentration) return fail('Desired concentration must be greater than current concentration.');
   const capacities: Record<string, number> = {
     'sack-25': 25,
     'drum-55': 55 * 3.78541 * chemicalDensity,
