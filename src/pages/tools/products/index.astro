@@ -15,13 +15,27 @@ const products = (await getCollection('products')).sort((a, b) => a.data.order -
           <div class="text-xs uppercase tracking-wide text-brass">{p.data.category}</div>
           <h3 class="js-product-name mt-2 font-semibold text-white">{p.data.name}</h3>
           {p.data.datasheet
-            ? <a href={p.data.datasheet} target="_blank" rel="noopener" class="mt-3 inline-block text-sm font-medium text-brass hover:text-brass-soft">View datasheet →</a>
+            ? <button type="button" class="js-view-datasheet mt-3 inline-block text-sm font-medium text-brass hover:text-brass-soft" data-pdf={p.data.datasheet} data-name={p.data.name}>View datasheet →</button>
             : <span class="mt-3 inline-block text-sm text-text-muted">Datasheet coming soon</span>}
         </div>
       ))}
     </div>
     <p id="product-empty" class="mt-8 hidden text-text-muted">No products match your search.</p>
   </section>
+
+  <!-- PDF viewer modal (single instance, reused for every product) -->
+  <div id="pdf-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-ink/80 p-4 backdrop-blur" role="dialog" aria-modal="true" aria-labelledby="pdf-modal-title">
+    <div class="flex h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-brass/20 bg-navy shadow-2xl">
+      <div class="flex items-center justify-between gap-4 border-b border-brass/20 px-5 py-3">
+        <h2 id="pdf-modal-title" class="font-display text-base font-semibold text-white">Datasheet</h2>
+        <div class="flex items-center gap-4">
+          <a id="pdf-modal-open" href="#" target="_blank" rel="noopener" class="text-sm font-medium text-brass hover:text-brass-soft">Open in new tab ↗</a>
+          <button type="button" id="pdf-modal-close" class="rounded-md p-1 text-2xl leading-none text-text-muted hover:text-white" aria-label="Close datasheet viewer">&times;</button>
+        </div>
+      </div>
+      <iframe id="pdf-modal-frame" title="Product datasheet" class="h-full w-full flex-1 bg-white" src="about:blank"></iframe>
+    </div>
+  </div>
   <script>
     const search = document.getElementById('product-search') as HTMLInputElement;
     const cards = document.querySelectorAll<HTMLElement>('.js-product');
@@ -36,6 +50,44 @@ const products = (await getCollection('products')).sort((a, b) => a.data.order -
         if (match) visible++;
       });
       empty.classList.toggle('hidden', visible !== 0);
+    });
+
+    // PDF viewer modal
+    const modal = document.getElementById('pdf-modal') as HTMLElement;
+    const frame = document.getElementById('pdf-modal-frame') as HTMLIFrameElement;
+    const title = document.getElementById('pdf-modal-title') as HTMLElement;
+    const openLink = document.getElementById('pdf-modal-open') as HTMLAnchorElement;
+    const closeBtn = document.getElementById('pdf-modal-close') as HTMLButtonElement;
+    let lastTrigger: HTMLElement | null = null;
+
+    const openModal = (pdf: string, name: string) => {
+      frame.src = pdf;
+      openLink.href = pdf;
+      title.textContent = name;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    };
+    const closeModal = () => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      frame.src = 'about:blank';
+      document.body.style.overflow = '';
+      lastTrigger?.focus();
+      lastTrigger = null;
+    };
+
+    document.querySelectorAll<HTMLButtonElement>('.js-view-datasheet').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        lastTrigger = btn;
+        openModal(btn.dataset.pdf || '', btn.dataset.name || 'Datasheet');
+      });
+    });
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
     });
   </script>
 </BaseLayout>
