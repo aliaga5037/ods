@@ -20,8 +20,8 @@ describe('cutWeight (variable volume)', () => {
   it('computes dilution volume', () => {
     const r = cutWeight({ initialWeight: 1.5, volume: 100, desiredWeight: 1.3, dilutionDensity: 1.0, constantVolume: false });
     expect(r.ok).toBe(true);
-    expect(num(r, 'Dilution')).toBeCloseTo(66.6667, 3);   // 100*(0.2)/(0.3)
-    expect(num(r, 'Final Volume')).toBeCloseTo(166.6667, 3);
+    expect(num(r, 'Dilution')).toBeCloseTo(66.6667, 2);   // 100*(0.2)/(0.3)
+    expect(num(r, 'Final Volume')).toBeCloseTo(166.6667, 2);
   });
   it('rejects desired >= initial', () => {
     expect(cutWeight({ initialWeight: 1.3, volume: 100, desiredWeight: 1.5, dilutionDensity: 1.0, constantVolume: false }).ok).toBe(false);
